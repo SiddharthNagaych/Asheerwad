@@ -1,101 +1,121 @@
+"use client";
+
+import Sidebar from "../components/Sidebar";
+import TopPicks from "../components/TopPicks";
+import LastPurchases from "../components/LastPurchases";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [books, setBooks] = useState<Book[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0); // Track current featured book index
+  const [loading, setLoading] = useState(true);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await fetch("/api/books");
+        const data = await res.json();
+        setBooks(data);
+      } catch (error) {
+        console.error("Failed to fetch books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []);
+
+  if (loading) {
+    return <div className="text-white text-center mt-20">Loading...</div>;
+  }
+
+  const featuredBook = books[currentIndex];
+  const topPicks = books.slice(0, 5);
+
+  const handleNextImage = () => {
+    // Move to the next book, wrapping around to the start if at the end
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % books.length);
+  };
+
+  return (
+    <div className="flex bg-gray-900 text-white min-h-screen">
+      {/* Main Layout */}
+      <main className="flex flex-col space-y-4 p-4 w-1/4">
+        {/* Search Bar */}
+        <div className="bg-gray-700 flex items-center p-3 rounded-lg">
+          <span className="text-yellow-500 text-2xl">🔍</span>
+          <input
+            type="text"
+            placeholder="Search any book..."
+            className="bg-transparent text-white flex-1 ml-2 outline-none"
+          />
+          <button className="bg-yellow-500 px-4 py-2 rounded-lg ml-2 text-sm">Filter</button>
+        </div>
+
+        {/* Top Picks */}
+        <div className="bg-gray-800 p-4 rounded-lg flex-1 overflow-hidden">
+          <h2 className="text-yellow-500 text-lg font-semibold">Top Picks</h2>
+          <TopPicks books={topPicks} />
+        </div>
+
+        {/* Last Purchases */}
+        <div className="bg-gray-800 p-4 rounded-lg flex-1 overflow-hidden">
+          <h2 className="text-yellow-500 text-lg font-semibold">Last Purchases</h2>
+          <LastPurchases books={books} />
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* Featured Book Section */}
+      <section className="flex-1 relative mx-6 my-8 bg-gray-800 rounded-3xl overflow-hidden shadow-2xl">
+        {featuredBook ? (
+          <>
+            {/* Featured Book Image */}
+            <Image
+              src={featuredBook.image || "/placeholder.png"}
+              alt={featuredBook.name || "Featured Book"}
+              fill
+              className="object-cover w-full h-full rounded-3xl"
+            />
+
+            {/* Overlay Content */}
+            <div className="absolute inset-0 bg-gray-900 bg-opacity-70 flex items-center p-8 rounded-3xl">
+              {/* Centered Content */}
+              <div className="flex flex-col justify-center items-start space-y-6 max-w-lg">
+                <h1 className="text-5xl font-bold text-yellow-500">
+                  {featuredBook.name}
+                </h1>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  {featuredBook.description}
+                </p>
+                <button className="bg-yellow-500 px-8 py-3 text-black rounded-lg font-semibold shadow-lg hover:bg-yellow-400 transition">
+                  Read Now
+                </button>
+              </div>
+            </div>
+
+            {/* Right-Side Slide Button */}
+            <button
+              onClick={handleNextImage}
+              className="absolute right-[-20px] top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full bg-yellow-500 text-black shadow-lg flex items-center justify-center hover:bg-yellow-400 transition"
+              style={{
+                border: "8px solid rgba(0, 0, 0, 0.7)", // "Black hole" effect
+              }}
+            >
+              ➡️
+            </button>
+
+         
+          </>
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-400">
+            No featured book available.
+          </div>
+        )}
+      </section>
+
+      {/* Sidebar */}
+      <Sidebar />
     </div>
   );
 }

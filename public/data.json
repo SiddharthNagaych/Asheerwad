@@ -1,0 +1,65 @@
+[
+    {
+        "id": 1,
+        "name": "Atomic Habits",
+        "price": 250,
+        "description": "An easy and proven way to build good habits and break bad ones.",
+        "image": "https://i.imghippo.com/files/TPIC5091bew.jpg"
+    },
+    {
+        "id": 2,
+        "name": "It Ends With Us",
+        "price": 150,
+        "description": "A story about love, resilience, and hard choices.",
+        "image": "https://i.imghippo.com/files/FwF4205JXM.jpg"
+    },
+    {
+        "id": 3,
+        "name": "The Death Note",
+        "price": 300,
+        "description": "The mysterious notebook that can kill anyone whose name is written in it.",
+        "image": "https://i.imghippo.com/files/YEb9177nNA.jpg"
+    },
+    {
+        "id": 4,
+        "name": "The Shadow of the Wind",
+        "price": 200,
+        "description": "A thrilling tale of passion and literature.",
+        "image": "https://i.imghippo.com/files/liQ8476eVg.jpg"
+    },
+    {
+        "id": 5,
+        "name": "The Vanishing Half",
+        "price": 180,
+        "description": "A story of identity, family, and race.",
+        "image": "https://i.imghippo.com/files/MTfb7105AkE.webp"
+    },
+    {
+        "id": 6,
+        "name": "The Alchemist",
+        "price": 220,
+        "description": "A magical fable about following your dreams.",
+        "image": "https://i.imghippo.com/files/RT8878mAU.jpg"
+    },
+    {
+        "id": 7,
+        "name": "The Midnight Library",
+        "price": 210,
+        "description": "A story about choices and alternate lives.",
+        "image": "https://i.imghippo.com/files/NrQq1925cEg.webp"
+    },
+    {
+        "id": 8,
+        "name": "Dune",
+        "price": 350,
+        "description": "A science fiction epic of politics, religion, and power.",
+        "image": "https://i.imghippo.com/files/mNA9011gSw.webp"
+    },
+    {
+        "id": 9,
+        "name": "Sapiens",
+        "price": 270,
+        "description": "A brief history of humankind.",
+        "image": "https://i.imghippo.com/files/mv8535x.jpg"
+    }
+]
