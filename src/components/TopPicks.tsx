@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 type Book = {
-  id: number;
+  id: string;
   name: string;
-  price: number;
+  price: string;
   image: string;
 };
 

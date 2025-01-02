@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import {
@@ -14,6 +14,8 @@ import {
 export default function Sidebar() {
   const { data: session } = useSession(); // Access the session data
   const [user, setUser] = useState<{ name: string; email: string; image: string } | null>(null);
+  const [cart, setCart] = useState<Book[]>([]);
+  const [cartMessage, setCartMessage] = useState<string>("");
 
   useEffect(() => {
     if (session?.user) {
@@ -26,6 +28,12 @@ export default function Sidebar() {
       setUser(null);
     }
   }, [session]);
+
+  const handleAddToCart = (book: Book) => {
+    setCart([...cart, book]);
+    setCartMessage("Added to Cart!");
+    setTimeout(() => setCartMessage(""), 3000); // Clear message after 3 seconds
+  };
 
   return (
     <aside className="bg-gray-800 text-white w-20 h-screen flex flex-col items-center py-8 rounded-lg shadow-lg">
@@ -78,12 +86,22 @@ export default function Sidebar() {
         )}
       </div>
 
-      {/* Mini Logo Icon */}
+      {/* Cart Icon with Link Navigation */}
       <div className="mt-8">
-        <button className="flex items-center justify-center p-3 bg-gray-700 hover:bg-gray-600 rounded-full shadow-md w-14 h-14">
-          <img src="/logo.webp" alt="Mini Logo" className="w-8 h-8" />
-        </button>
+        <Link href="/cart">
+          <button
+            className="flex items-center justify-center p-3 bg-gray-700 hover:bg-gray-600 rounded-full shadow-md w-14 h-14"
+          >
+            <FaShoppingCart size={24} />
+          </button>
+        </Link>
       </div>
+
+      {cartMessage && (
+        <div className="absolute bottom-0 mb-4 bg-gray-700 text-yellow-500 px-4 py-2 rounded-lg">
+          {cartMessage}
+        </div>
+      )}
     </aside>
   );
 }

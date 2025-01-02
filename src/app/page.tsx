@@ -1,16 +1,21 @@
 "use client";
 
-import Sidebar from "../components/Sidebar";
-import TopPicks from "../components/TopPicks";
-import LastPurchases from "../components/LastPurchases";
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import LastPurchases from "@/components/LastPurchases";
+import SearchBar from "@/components/SearchBar";
+import Sidebar from "@/components/Sidebar";
+import TopPicks from "@/components/TopPicks";
 import { SessionProvider } from "next-auth/react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [books, setBooks] = useState<Book[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0); // Track current featured book index
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -27,10 +32,6 @@ export default function Home() {
     fetchBooks();
   }, []);
 
-  if (loading) {
-    return <div className="text-white text-center mt-20">Loading...</div>;
-  }
-
   const featuredBook = books[currentIndex];
   const topPicks = books.slice(0, 5);
 
@@ -39,21 +40,28 @@ export default function Home() {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % books.length);
   };
 
+ 
+
+  const filteredBooks = books.filter((book) =>
+    book.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (loading) {
+    return <div className="text-white text-center mt-20">Loading...</div>;
+  }
+
   return (
     <SessionProvider>
       <div className="flex bg-gray-900 text-white min-h-screen">
         {/* Main Layout */}
         <main className="flex flex-col space-y-4 p-4 w-1/4">
           {/* Search Bar */}
-          <div className="bg-gray-700 flex items-center p-3 rounded-lg">
-            <span className="text-yellow-500 text-2xl">🔍</span>
-            <input
-              type="text"
-              placeholder="Search any book..."
-              className="bg-transparent text-white flex-1 ml-2 outline-none"
-            />
-            <button className="bg-yellow-500 px-4 py-2 rounded-lg ml-2 text-sm">Filter</button>
-          </div>
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            filteredBooks={filteredBooks}
+            
+          />
 
           {/* Top Picks */}
           <div className="bg-gray-800 p-4 rounded-lg flex-1 overflow-hidden">
